@@ -1,44 +1,28 @@
 require ('./config/config');
 
+const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 
 const bodyParser = require('body-parser');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
- 
+app.use(bodyParser.urlencoded({ extended: false })) 
 // parse application/json
 app.use(bodyParser.json())
 
- 
-app.get('/usuario', function (req, res) {
-  res.send('Peticion get')
-})
 
-app.post('/usuario', function (req, res) {
-    let user = req.body;
+//importamos las rutas get,post, put, delete
+app.use(require('./rutas/usuario'));
 
 
-    res.json({
-        user
-    })
-})
+mongoose.connect('mongodb://localhost:27017/Cafe-de-olla', {useNewUrlParser: true}, (err) => {
+    if(err) throw err;
 
-app.put('/usuario', function (req, res) {
-   
-    let datos = req.body;
+    console.log('Base de datos CONECTADA');
+});
 
 
-    res.json({
-        datos
-    })
-})
-
-app.delete('/usuario', function (req, res) {
-    res.send('Peticion delete')
-})
- 
 app.listen(process.argv.PORT, () => {
     console.log('Escuchando peticiones en el puerto 3000');
 })
